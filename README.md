@@ -1,1 +1,1 @@
-# template_ibm_wasnd_v9_standalone
+Copyright IBM Corp. 2017, 2017
