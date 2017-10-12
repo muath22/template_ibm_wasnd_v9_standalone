@@ -1,9 +1,9 @@
-# Template - IBM WebSphere Network Deployment 9 on a single VM
+# Template - IBM WebSphere Network Deployment V9 on a single virtual machine
 Template Version - 1.0
 
 ## Description
 
-This template deploys a standalone instance of WebSphere Application Server Network Deployment 9 on a Linux virtual machine.<br>
+This template deploys a standalone instance of WebSphere Application Server Network Deployment V9 on a Linux virtual machine.<br>
 
 ## Features
 
@@ -25,16 +25,16 @@ Ubuntu 14.04 LTS<br>
 ### Topology
 
 1 virtual machine:<br>
-  IBM WebSphere Application Server Network Deployment 9 - standalone server<br>
+  IBM WebSphere Application Server Network Deployment V9 - standalone server<br>
 <br>
 ### Software Deployed
 
-IBM WebSphere Application Server Network Deployment 9<br>
+IBM WebSphere Application Server Network Deployment V9<br>
 IBM SDK, Java Technology Edition 8<br>
 <br>
 ### Default Virtual Machine Settings
 
- vCPU 2, Memory (GB) 2<br>
+ vCPU 1, Memory (GB) 2<br>
 <br>
 ### Usage and Special Notes
 
@@ -42,6 +42,7 @@ IBM SDK, Java Technology Edition 8<br>
 2. Detailed system requirements for WAS ND 9 - <a href=\"https://www.ibm.com/software/reports/compatibility/clarity/index.html\" target=\"_blank\">https://www.ibm.com/software/reports/compatibility/clarity/index.html</a><br>
 3. IBM Knowledge Center for WAS ND 9 - <a href=\"https://www.ibm.com/support/knowledgecenter/en/SSAW57_9.0.0\" target=\"_blank\">https://www.ibm.com/support/knowledgecenter/en/SSAW57_9.0.0</a><br>
 4. IBM Support Portal - <a href=\"https://www.ibm.com/support/home/\" target=\"_blank\">https://www.ibm.com/support/home/</a><br>
+<br>
 
 
 ## Overview
