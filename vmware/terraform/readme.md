@@ -1,4 +1,4 @@
-# Template - IBM WebSphere Network Deployment V9 on a single virtual machine
+# Template - IBM WebSphere Application Server Network Deployment V9 on a single virtual machine
 Template Version - 1.0
 
 ## Description
@@ -25,12 +25,12 @@ Ubuntu 14.04 LTS<br>
 ### Topology
 
 1 virtual machine:<br>
-  IBM WebSphere Application Server Network Deployment V9 - standalone server<br>
+  IBM WebSphere Application Server Network Deployment - standalone server<br>
 <br>
 ### Software Deployed
 
 IBM WebSphere Application Server Network Deployment V9<br>
-IBM SDK, Java Technology Edition 8<br>
+IBM SDK, Java Technology Edition V8<br>
 <br>
 ### Default Virtual Machine Settings
 
