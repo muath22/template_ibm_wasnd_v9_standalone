@@ -1,5 +1,5 @@
 # Template - IBM WebSphere Network Deployment V9 on a single virtual machine
-Template Version - 1.0
+Template Version - 2.0
 
 ## Description
 
@@ -10,10 +10,6 @@ This template deploys a standalone instance of WebSphere Application Server Netw
 ### Clouds
 
  IBM<br>
-<br>
-### Template Version
-
-1.0<br>
 <br>
 ### Operating Systems Supported
 
@@ -41,7 +37,7 @@ IBM SDK, Java Technology Edition 8<br>
 1. The user is responsible for obtaining appropriate software licenses and downloads prior to template deployment.<br>
 2. Detailed system requirements for WAS ND 9 - <a href=\"https://www.ibm.com/software/reports/compatibility/clarity/index.html\" target=\"_blank\">https://www.ibm.com/software/reports/compatibility/clarity/index.html</a><br>
 3. IBM Knowledge Center for WAS ND 9 - <a href=\"https://www.ibm.com/support/knowledgecenter/en/SSAW57_9.0.0\" target=\"_blank\">https://www.ibm.com/support/knowledgecenter/en/SSAW57_9.0.0</a><br>
-4. IBM Support Portal - <a href=\"https://www.ibm.com/support/home/\" target=\"_blank\">https://www.ibm.com/support/home/</a><br>
+4. IBM Support Portal - <a href=\"https://www.ibm.com/support/home/\" target=\"_blank\">https://www.ibm.com/support/home/ </a><br>
 <br>
 
 
@@ -49,7 +45,7 @@ IBM SDK, Java Technology Edition 8<br>
 
 ### License and Maintainer
 
-Copyright IBM Corp. 2016, 2017 
+Copyright IBM Corp. 2017, 2018 
 
 ### Target Cloud Type
 
@@ -69,6 +65,7 @@ IBM
 
 - IBM WebSphere  8.5.5.12
 - IBM WebSphere  9.0.0.4
+- IBM WebSphere  9.0.0.6
 
 
 *Note, these represent base versions only, explicit fixpacks may also be added.*

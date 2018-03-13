@@ -1,9 +1,17 @@
 # =================================================================
-# Licensed Materials - Property of IBM
-# 5737-E67
-# @ Copyright IBM Corporation 2016, 2017 All Rights Reserved
-# US Government Users Restricted Rights - Use, duplication or disclosure
-# restricted by GSA ADP Schedule Contract with IBM Corp.
+# Copyright 2017 IBM Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+#	you may not use this file except in compliance with the License.
+#	You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 # =================================================================
 
 # This is a terraform generated template generated from ibm_wasnd_v9_standalone
@@ -22,14 +30,21 @@ variable "ibm_pm_private_ssh_key" {
 variable "user_public_ssh_key" {
   type = "string"
   description = "User defined public SSH key used to connect to the virtual machine. The format must be in openSSH."
+  default = "None"
+}
+
+variable "ibm_stack_id" {
+  description = "A unique stack id."
 }
 
 variable "aws_ami_owner_id" {
   description = "AWS AMI Owner ID"
+  default = "309956199498"
 }
 
 variable "aws_region" {
   description = "AWS Region Name"
+  default = "us-east-1"
 }
 
 ##############################################################
@@ -45,10 +60,6 @@ provider "camc" {
 }
 
 provider "template" {
-  version = "~> 1.0"
-}
-
-provider "random" {
   version = "~> 1.0"
 }
 
@@ -72,10 +83,6 @@ data "aws_security_group" "aws_sg_camc_name_selected" {
 #Parameter : aws_sg_camc_name
 variable "aws_sg_camc_name" {
   description = "AWS Security Group Name"
-}
-
-resource "random_id" "stack_id" {
-  byte_length = "16"
 }
 
 ##############################################################
@@ -104,6 +111,7 @@ variable "ibm_im_repo_password" {
 variable "ibm_im_repo_user" {
   type = "string"
   description = "IBM Software  Installation Manager Repository username"
+  default = "repouser"
 }
 
 #Variable : ibm_pm_access_token
@@ -134,6 +142,7 @@ variable "ibm_sw_repo_password" {
 variable "ibm_sw_repo_user" {
   type = "string"
   description = "IBM Software Repo Username"
+  default = "repouser"
 }
 
 
@@ -142,12 +151,14 @@ variable "ibm_sw_repo_user" {
 variable "WASNode01-flavor" {
   type = "string"
   description = "WASNode01 Flavor"
+  default = "t2.medium"
 }
 
 #Variable : WASNode01-mgmt-network-public
 variable "WASNode01-mgmt-network-public" {
   type = "string"
   description = "Expose and use public IP of virtual machine for internal communication"
+  default = "true"
 }
 
 
@@ -165,6 +176,7 @@ data "aws_ami" "WASNode01_ami" {
 variable "WASNode01-image" {
   type = "string"
   description = "Operating system image id / template that should be used when creating the virtual image"
+  default = "RHEL-7.4_HVM_GA"
 }
 
 #Variable : WASNode01-name
@@ -183,48 +195,56 @@ variable "WASNode01-os_admin_user" {
 variable "WASNode01_was_install_dir" {
   type = "string"
   description = "The installation root directory for the WebSphere Application Server product binaries"
+  default = "/opt/IBM/WebSphere/AppServer"
 }
 
 #Variable : WASNode01_was_java_version
 variable "WASNode01_was_java_version" {
   type = "string"
   description = "The Java SDK version that should be installed with the WebSphere Application Server. Example format is 8.0.4.70"
+  default = "8.0.50.7"
 }
 
 #Variable : WASNode01_was_os_users_was_gid
 variable "WASNode01_was_os_users_was_gid" {
   type = "string"
   description = "Operating system group name that will be assigned to the product installation"
+  default = "wasgrp"
 }
 
 #Variable : WASNode01_was_os_users_was_home
 variable "WASNode01_was_os_users_was_home" {
   type = "string"
   description = "Home directory location for operating system user that is used for product installation"
+  default = "/home/wasadmin"
 }
 
 #Variable : WASNode01_was_os_users_was_ldap_user
 variable "WASNode01_was_os_users_was_ldap_user" {
   type = "string"
   description = "A flag which indicates whether to create the WebSphere user locally, or utilize an LDAP based user"
+  default = "false"
 }
 
 #Variable : WASNode01_was_os_users_was_name
 variable "WASNode01_was_os_users_was_name" {
   type = "string"
   description = "Operating system userid that will be used to install the product. Userid will be created if it does not exist"
+  default = "wasadmin"
 }
 
 #Variable : WASNode01_was_profile_dir
 variable "WASNode01_was_profile_dir" {
   type = "string"
   description = "The directory path that contains WebSphere Application Server profiles"
+  default = "/opt/IBM/WebSphere/AppServer/profiles"
 }
 
 #Variable : WASNode01_was_profiles_standalone_profiles_standalone1_cell
 variable "WASNode01_was_profiles_standalone_profiles_standalone1_cell" {
   type = "string"
   description = "Cell name for the application server"
+  default = "cell01"
 }
 
 #Variable : WASNode01_was_profiles_standalone_profiles_standalone1_keystorepassword
@@ -237,18 +257,21 @@ variable "WASNode01_was_profiles_standalone_profiles_standalone1_keystorepasswor
 variable "WASNode01_was_profiles_standalone_profiles_standalone1_profile" {
   type = "string"
   description = "Application server profile name"
+  default = "AppSrv01"
 }
 
 #Variable : WASNode01_was_profiles_standalone_profiles_standalone1_server
 variable "WASNode01_was_profiles_standalone_profiles_standalone1_server" {
   type = "string"
   description = "Name of the application server"
+  default = "server1"
 }
 
 #Variable : WASNode01_was_security_admin_user
 variable "WASNode01_was_security_admin_user" {
   type = "string"
   description = "The username for securing the WebSphere adminstrative console"
+  default = "wasadmin"
 }
 
 #Variable : WASNode01_was_security_admin_user_pwd
@@ -261,25 +284,27 @@ variable "WASNode01_was_security_admin_user_pwd" {
 variable "WASNode01_was_version" {
   type = "string"
   description = "The release and fixpack level of WebSphere Application Server to be installed. Example formats are 8.5.5.12 or 9.0.0.4"
+  default = "9.0.0.6"
 }
 
 #Variable : WASNode01_was_wsadmin_standalone_jvmproperty_property_value_initial
 variable "WASNode01_was_wsadmin_standalone_jvmproperty_property_value_initial" {
   type = "string"
   description = "Minimum JVM heap size"
+  default = "256"
 }
 
 #Variable : WASNode01_was_wsadmin_standalone_jvmproperty_property_value_maximum
 variable "WASNode01_was_wsadmin_standalone_jvmproperty_property_value_maximum" {
   type = "string"
   description = "Maximum JVM heap size"
+  default = "512"
 }
 
-
-##### ungrouped variables #####
 ##### domain name #####
 variable "runtime_domain" {
   description = "domain name"
+  default = "cam.ibm.com"
 }
 
 
@@ -297,7 +322,7 @@ resource "camc_vaultitem" "VaultItem" {
   "vault_content": {
     "item": "secrets",
     "values": {},
-    "vault": "${random_id.stack_id.hex}"
+    "vault": "${var.ibm_stack_id}"
   }
 }
 EOT
@@ -327,6 +352,7 @@ variable "WASNode01_subnet_name" {
 variable "WASNode01_associate_public_ip_address" {
   type = "string"
   description = "AWS assign a public IP to instance"
+  default = "true"
 }
 
 
@@ -334,6 +360,7 @@ variable "WASNode01_associate_public_ip_address" {
 variable "WASNode01_root_block_device_volume_type" {
   type = "string"
   description = "AWS Root Block Device Volume Type"
+  default = "gp2"
 }
 
 
@@ -341,6 +368,7 @@ variable "WASNode01_root_block_device_volume_type" {
 variable "WASNode01_root_block_device_volume_size" {
   type = "string"
   description = "AWS Root Block Device Volume Size"
+  default = "100"
 }
 
 
@@ -348,6 +376,7 @@ variable "WASNode01_root_block_device_volume_size" {
 variable "WASNode01_root_block_device_delete_on_termination" {
   type = "string"
   description = "AWS Root Block Device Delete on Termination"
+  default = "true"
 }
 
 resource "aws_instance" "WASNode01" {
@@ -371,11 +400,20 @@ resource "aws_instance" "WASNode01" {
     destination = "WASNode01_add_ssh_key.sh"
     content     = <<EOF
 # =================================================================
-# Licensed Materials - Property of IBM
-# 5737-E67
-# @ Copyright IBM Corporation 2016, 2017 All Rights Reserved
-# US Government Users Restricted Rights - Use, duplication or disclosure
-# restricted by GSA ADP Schedule Contract with IBM Corp.
+# Copyright 2017 IBM Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+#	you may not use this file except in compliance with the License.
+#	You may obtain a copy of the License at
+#
+#	  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+#	WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 # =================================================================
 #!/bin/bash
 
@@ -454,17 +492,17 @@ resource "camc_bootstrap" "WASNode01_chef_bootstrap_comp" {
   data = <<EOT
 {
   "os_admin_user": "${var.WASNode01-os_admin_user}",
-  "stack_id": "${random_id.stack_id.hex}",
+  "stack_id": "${var.ibm_stack_id}",
   "environment_name": "_default",
   "host_ip": "${var.WASNode01-mgmt-network-public == "false" ? aws_instance.WASNode01.private_ip : aws_instance.WASNode01.public_ip}",
   "node_name": "${var.WASNode01-name}",
   "node_attributes": {
     "ibm_internal": {
-      "stack_id": "${random_id.stack_id.hex}",
+      "stack_id": "${var.ibm_stack_id}",
       "stack_name": "${var.ibm_stack_name}",
       "vault": {
         "item": "secrets",
-        "name": "${random_id.stack_id.hex}"
+        "name": "${var.ibm_stack_id}"
       }
     }
   }
@@ -487,7 +525,7 @@ resource "camc_softwaredeploy" "WASNode01_was_create_standalone" {
   data = <<EOT
 {
   "os_admin_user": "${var.WASNode01-os_admin_user}",
-  "stack_id": "${random_id.stack_id.hex}",
+  "stack_id": "${var.ibm_stack_id}",
   "environment_name": "_default",
   "host_ip": "${var.WASNode01-mgmt-network-public == "false" ? aws_instance.WASNode01.private_ip : aws_instance.WASNode01.public_ip}",
   "node_name": "${var.WASNode01-name}",
@@ -529,7 +567,7 @@ resource "camc_softwaredeploy" "WASNode01_was_create_standalone" {
         }
       }
     },
-    "vault": "${random_id.stack_id.hex}"
+    "vault": "${var.ibm_stack_id}"
   }
 }
 EOT
@@ -550,7 +588,7 @@ resource "camc_softwaredeploy" "WASNode01_was_v9_install" {
   data = <<EOT
 {
   "os_admin_user": "${var.WASNode01-os_admin_user}",
-  "stack_id": "${random_id.stack_id.hex}",
+  "stack_id": "${var.ibm_stack_id}",
   "environment_name": "_default",
   "host_ip": "${var.WASNode01-mgmt-network-public == "false" ? aws_instance.WASNode01.private_ip : aws_instance.WASNode01.public_ip}",
   "node_name": "${var.WASNode01-name}",
@@ -596,7 +634,7 @@ resource "camc_softwaredeploy" "WASNode01_was_v9_install" {
         }
       }
     },
-    "vault": "${random_id.stack_id.hex}"
+    "vault": "${var.ibm_stack_id}"
   }
 }
 EOT
@@ -615,6 +653,6 @@ output "WASNode01_roles" {
 }
 
 output "stack_id" {
-  value = "${random_id.stack_id.hex}"
+  value = "${var.ibm_stack_id}"
 }
 

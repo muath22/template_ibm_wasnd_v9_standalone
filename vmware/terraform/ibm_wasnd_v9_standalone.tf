@@ -1,19 +1,32 @@
 # =================================================================
-# Licensed Materials - Property of IBM
-# 5737-E67
-# @ Copyright IBM Corporation 2016, 2017 All Rights Reserved
-# US Government Users Restricted Rights - Use, duplication or disclosure
-# restricted by GSA ADP Schedule Contract with IBM Corp.
+# Copyright 2017 IBM Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+#	you may not use this file except in compliance with the License.
+#	You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 # =================================================================
 
 # This is a terraform generated template generated from ibm_wasnd_v9_standalone
 
 ##############################################################
-# Keys - CAMC (public/private) & optional User Key (public) 
+# Keys - CAMC (public/private) & optional User Key (public)
 ##############################################################
 variable "user_public_ssh_key" {
   type = "string"
   description = "User defined public SSH key used to connect to the virtual machine. The format must be in openSSH."
+  default = "None"
+}
+
+variable "ibm_stack_id" {
+  description = "A unique stack id."
 }
 
 variable "ibm_pm_public_ssh_key" {
@@ -26,36 +39,52 @@ variable "ibm_pm_private_ssh_key" {
 
 variable "allow_unverified_ssl" {
   description = "Communication with vsphere server with self signed certificate"
+  default = "true"
 }
 
 ##############################################################
-# Define the vsphere provider 
+# Define the vsphere provider
 ##############################################################
 provider "vsphere" {
   allow_unverified_ssl = "${var.allow_unverified_ssl}"
-  version = "~> 0.4"
+  version = "~> 1.2"
 }
 
 provider "camc" {
   version = "~> 0.1"
 }
 
-provider "random" {
-  version = "~> 1.0"
-}
-
-resource "random_id" "stack_id" {
-  byte_length = "16"
-}
-
 ##############################################################
-# Define pattern variables 
+# Define pattern variables
 ##############################################################
 ##### unique stack name #####
 variable "ibm_stack_name" {
   description = "A unique stack name."
 }
 
+##############################################################
+# Vsphere data for provider
+##############################################################
+data "vsphere_datacenter" "WASNode01_datacenter" {
+  name = "${var.WASNode01_datacenter}"
+}
+data "vsphere_datastore" "WASNode01_datastore" {
+  name = "${var.WASNode01_root_disk_datastore}"
+  datacenter_id = "${data.vsphere_datacenter.WASNode01_datacenter.id}"
+}
+data "vsphere_resource_pool" "WASNode01_resource_pool" {
+  name = "${var.WASNode01_resource_pool}"
+  datacenter_id = "${data.vsphere_datacenter.WASNode01_datacenter.id}"
+}
+data "vsphere_network" "WASNode01_network" {
+  name = "${var.WASNode01_network_interface_label}"
+  datacenter_id = "${data.vsphere_datacenter.WASNode01_datacenter.id}"
+}
+
+data "vsphere_virtual_machine" "WASNode01_template" {
+  name = "${var.WASNode01-image}"
+  datacenter_id = "${data.vsphere_datacenter.WASNode01_datacenter.id}"
+}
 
 ##### Environment variables #####
 #Variable : ibm_im_repo
@@ -74,6 +103,7 @@ variable "ibm_im_repo_password" {
 variable "ibm_im_repo_user" {
   type = "string"
   description = "IBM Software  Installation Manager Repository username"
+  default = "repouser"
 }
 
 #Variable : ibm_pm_access_token
@@ -104,6 +134,7 @@ variable "ibm_sw_repo_password" {
 variable "ibm_sw_repo_user" {
   type = "string"
   description = "IBM Software Repo Username"
+  default = "repouser"
 }
 
 
@@ -132,48 +163,56 @@ variable "WASNode01-os_admin_user" {
 variable "WASNode01_was_install_dir" {
   type = "string"
   description = "The installation root directory for the WebSphere Application Server product binaries"
+  default = "/opt/IBM/WebSphere/AppServer"
 }
 
 #Variable : WASNode01_was_java_version
 variable "WASNode01_was_java_version" {
   type = "string"
   description = "The Java SDK version that should be installed with the WebSphere Application Server. Example format is 8.0.4.70"
+  default = "8.0.50.7"
 }
 
 #Variable : WASNode01_was_os_users_was_gid
 variable "WASNode01_was_os_users_was_gid" {
   type = "string"
   description = "Operating system group name that will be assigned to the product installation"
+  default = "wasgrp"
 }
 
 #Variable : WASNode01_was_os_users_was_home
 variable "WASNode01_was_os_users_was_home" {
   type = "string"
   description = "Home directory location for operating system user that is used for product installation"
+  default = "/home/wasadmin"
 }
 
 #Variable : WASNode01_was_os_users_was_ldap_user
 variable "WASNode01_was_os_users_was_ldap_user" {
   type = "string"
   description = "A flag which indicates whether to create the WebSphere user locally, or utilize an LDAP based user"
+  default = "false"
 }
 
 #Variable : WASNode01_was_os_users_was_name
 variable "WASNode01_was_os_users_was_name" {
   type = "string"
   description = "Operating system userid that will be used to install the product. Userid will be created if it does not exist"
+  default = "wasadmin"
 }
 
 #Variable : WASNode01_was_profile_dir
 variable "WASNode01_was_profile_dir" {
   type = "string"
   description = "The directory path that contains WebSphere Application Server profiles"
+  default = "/opt/IBM/WebSphere/AppServer/profiles"
 }
 
 #Variable : WASNode01_was_profiles_standalone_profiles_standalone1_cell
 variable "WASNode01_was_profiles_standalone_profiles_standalone1_cell" {
   type = "string"
   description = "Cell name for the application server"
+  default = "cell01"
 }
 
 #Variable : WASNode01_was_profiles_standalone_profiles_standalone1_keystorepassword
@@ -186,18 +225,21 @@ variable "WASNode01_was_profiles_standalone_profiles_standalone1_keystorepasswor
 variable "WASNode01_was_profiles_standalone_profiles_standalone1_profile" {
   type = "string"
   description = "Application server profile name"
+  default = "AppSrv01"
 }
 
 #Variable : WASNode01_was_profiles_standalone_profiles_standalone1_server
 variable "WASNode01_was_profiles_standalone_profiles_standalone1_server" {
   type = "string"
   description = "Name of the application server"
+  default = "server1"
 }
 
 #Variable : WASNode01_was_security_admin_user
 variable "WASNode01_was_security_admin_user" {
   type = "string"
   description = "The username for securing the WebSphere adminstrative console"
+  default = "wasadmin"
 }
 
 #Variable : WASNode01_was_security_admin_user_pwd
@@ -210,22 +252,23 @@ variable "WASNode01_was_security_admin_user_pwd" {
 variable "WASNode01_was_version" {
   type = "string"
   description = "The release and fixpack level of WebSphere Application Server to be installed. Example formats are 8.5.5.12 or 9.0.0.4"
+  default = "9.0.0.6"
 }
 
 #Variable : WASNode01_was_wsadmin_standalone_jvmproperty_property_value_initial
 variable "WASNode01_was_wsadmin_standalone_jvmproperty_property_value_initial" {
   type = "string"
   description = "Minimum JVM heap size"
+  default = "256"
 }
 
 #Variable : WASNode01_was_wsadmin_standalone_jvmproperty_property_value_maximum
 variable "WASNode01_was_wsadmin_standalone_jvmproperty_property_value_maximum" {
   type = "string"
   description = "Maximum JVM heap size"
+  default = "512"
 }
 
-
-##### ungrouped variables #####
 
 #########################################################
 ##### Resource : VaultItem
@@ -241,7 +284,7 @@ resource "camc_vaultitem" "VaultItem" {
   "vault_content": {
     "item": "secrets",
     "values": {},
-    "vault": "${random_id.stack_id.hex}"
+    "vault": "${var.ibm_stack_id}"
   }
 }
 EOT
@@ -271,14 +314,20 @@ variable "WASNode01_domain" {
 
 variable "WASNode01_number_of_vcpu" {
   description = "Number of virtual CPU for the virtual machine, which is required to be a positive Integer"
+  default = "2"
 }
 
 variable "WASNode01_memory" {
   description = "Memory assigned to the virtual machine in megabytes. This value is required to be an increment of 1024"
+  default = "4096"
 }
 
 variable "WASNode01_cluster" {
   description = "Target vSphere cluster to host the virtual machine"
+}
+
+variable "WASNode01_resource_pool" {
+  description = "Target vSphere Resource Pool to host the virtual machine"
 }
 
 variable "WASNode01_dns_suffixes" {
@@ -309,53 +358,59 @@ variable "WASNode01_ipv4_prefix_length" {
 
 variable "WASNode01_adapter_type" {
   description = "Network adapter type for vNIC Configuration"
+  default = "vmxnet3"
 }
 
 variable "WASNode01_root_disk_datastore" {
   description = "Data store or storage cluster name for target virtual machine's disks"
 }
 
-variable "WASNode01_root_disk_type" {
-  type = "string"
-  description = "Type of template disk volume"
-}
-
-variable "WASNode01_root_disk_controller_type" {
-  type = "string"
-  description = "Type of template disk controller"
-}
-
 variable "WASNode01_root_disk_keep_on_remove" {
   type = "string"
   description = "Delete template disk volume when the virtual machine is deleted"
+  default = "false"
+}
+
+variable "WASNode01_root_disk_size" {
+  description = "Size of template disk volume. Should be equal to template's disk size"
+  default = "100"
 }
 
 # vsphere vm
 resource "vsphere_virtual_machine" "WASNode01" {
   name = "${var.WASNode01-name}"
-  domain = "${var.WASNode01_domain}"
   folder = "${var.WASNode01_folder}"
-  datacenter = "${var.WASNode01_datacenter}"
-  vcpu = "${var.WASNode01_number_of_vcpu}"
+  num_cpus = "${var.WASNode01_number_of_vcpu}"
   memory = "${var.WASNode01_memory}"
-  cluster = "${var.WASNode01_cluster}"
-  dns_suffixes = "${var.WASNode01_dns_suffixes}"
-  dns_servers = "${var.WASNode01_dns_servers}"
+  resource_pool_id = "${data.vsphere_resource_pool.WASNode01_resource_pool.id}"
+  datastore_id = "${data.vsphere_datastore.WASNode01_datastore.id}"
+  guest_id = "${data.vsphere_virtual_machine.WASNode01_template.guest_id}"
+  clone {
+    template_uuid = "${data.vsphere_virtual_machine.WASNode01_template.id}"
+    customize {
+      linux_options {
+        domain = "${var.WASNode01_domain}"
+        host_name = "${var.WASNode01-name}"
+      }
+    network_interface {
+      ipv4_address = "${var.WASNode01_ipv4_address}"
+      ipv4_netmask = "${var.WASNode01_ipv4_prefix_length}"
+    }
+    ipv4_gateway = "${var.WASNode01_ipv4_gateway}"
+    dns_suffix_list = "${var.WASNode01_dns_suffixes}"
+    dns_server_list = "${var.WASNode01_dns_servers}"
+    }
+  }
 
   network_interface {
-    label = "${var.WASNode01_network_interface_label}"
-    ipv4_gateway = "${var.WASNode01_ipv4_gateway}"
-    ipv4_address = "${var.WASNode01_ipv4_address}"
-    ipv4_prefix_length = "${var.WASNode01_ipv4_prefix_length}"
+    network_id = "${data.vsphere_network.WASNode01_network.id}"
     adapter_type = "${var.WASNode01_adapter_type}"
   }
 
   disk {
-    type = "${var.WASNode01_root_disk_type}"
-    template = "${var.WASNode01-image}"
-    datastore = "${var.WASNode01_root_disk_datastore}"
+    label = "${var.WASNode01-name}.disk0"
+    size = "${var.WASNode01_root_disk_size}"
     keep_on_remove = "${var.WASNode01_root_disk_keep_on_remove}"
-    controller_type = "${var.WASNode01_root_disk_controller_type}"
   }
 
   # Specify the connection
@@ -369,11 +424,20 @@ resource "vsphere_virtual_machine" "WASNode01" {
     destination = "WASNode01_add_ssh_key.sh"
     content     = <<EOF
 # =================================================================
-# Licensed Materials - Property of IBM
-# 5737-E67
-# @ Copyright IBM Corporation 2016, 2017 All Rights Reserved
-# US Government Users Restricted Rights - Use, duplication or disclosure
-# restricted by GSA ADP Schedule Contract with IBM Corp.
+# Copyright 2017 IBM Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+#	you may not use this file except in compliance with the License.
+#	You may obtain a copy of the License at
+#
+#	  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+#	WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 # =================================================================
 #!/bin/bash
 
@@ -447,17 +511,17 @@ resource "camc_bootstrap" "WASNode01_chef_bootstrap_comp" {
   data = <<EOT
 {
   "os_admin_user": "${var.WASNode01-os_admin_user}",
-  "stack_id": "${random_id.stack_id.hex}",
+  "stack_id": "${var.ibm_stack_id}",
   "environment_name": "_default",
-  "host_ip": "${vsphere_virtual_machine.WASNode01.network_interface.0.ipv4_address}",
+  "host_ip": "${vsphere_virtual_machine.WASNode01.clone.0.customize.0.network_interface.0.ipv4_address}",
   "node_name": "${var.WASNode01-name}",
   "node_attributes": {
     "ibm_internal": {
-      "stack_id": "${random_id.stack_id.hex}",
+      "stack_id": "${var.ibm_stack_id}",
       "stack_name": "${var.ibm_stack_name}",
       "vault": {
         "item": "secrets",
-        "name": "${random_id.stack_id.hex}"
+        "name": "${var.ibm_stack_id}"
       }
     }
   }
@@ -480,9 +544,9 @@ resource "camc_softwaredeploy" "WASNode01_was_create_standalone" {
   data = <<EOT
 {
   "os_admin_user": "${var.WASNode01-os_admin_user}",
-  "stack_id": "${random_id.stack_id.hex}",
+  "stack_id": "${var.ibm_stack_id}",
   "environment_name": "_default",
-  "host_ip": "${vsphere_virtual_machine.WASNode01.network_interface.0.ipv4_address}",
+  "host_ip": "${vsphere_virtual_machine.WASNode01.clone.0.customize.0.network_interface.0.ipv4_address}",
   "node_name": "${var.WASNode01-name}",
   "runlist": "role[was_create_standalone]",
   "node_attributes": {
@@ -522,7 +586,7 @@ resource "camc_softwaredeploy" "WASNode01_was_create_standalone" {
         }
       }
     },
-    "vault": "${random_id.stack_id.hex}"
+    "vault": "${var.ibm_stack_id}"
   }
 }
 EOT
@@ -543,9 +607,9 @@ resource "camc_softwaredeploy" "WASNode01_was_v9_install" {
   data = <<EOT
 {
   "os_admin_user": "${var.WASNode01-os_admin_user}",
-  "stack_id": "${random_id.stack_id.hex}",
+  "stack_id": "${var.ibm_stack_id}",
   "environment_name": "_default",
-  "host_ip": "${vsphere_virtual_machine.WASNode01.network_interface.0.ipv4_address}",
+  "host_ip": "${vsphere_virtual_machine.WASNode01.clone.0.customize.0.network_interface.0.ipv4_address}",
   "node_name": "${var.WASNode01-name}",
   "runlist": "role[was_v9_install]",
   "node_attributes": {
@@ -589,14 +653,14 @@ resource "camc_softwaredeploy" "WASNode01_was_v9_install" {
         }
       }
     },
-    "vault": "${random_id.stack_id.hex}"
+    "vault": "${var.ibm_stack_id}"
   }
 }
 EOT
 }
 
 output "WASNode01_ip" {
-  value = "VM IP Address : ${vsphere_virtual_machine.WASNode01.network_interface.0.ipv4_address}"
+  value = "VM IP Address : ${vsphere_virtual_machine.WASNode01.clone.0.customize.0.network_interface.0.ipv4_address}"
 }
 
 output "WASNode01_name" {
@@ -608,6 +672,5 @@ output "WASNode01_roles" {
 }
 
 output "stack_id" {
-  value = "${random_id.stack_id.hex}"
+  value = "${var.ibm_stack_id}"
 }
-
