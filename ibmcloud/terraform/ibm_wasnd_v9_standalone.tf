@@ -42,11 +42,11 @@ variable "ibm_stack_id" {
 ##############################################################
 #define the ibm provider
 provider "ibm" {
-  version = "~> 0.5"
+  version = "~> 0.7"
 }
 
 provider "camc" {
-  version = "~> 0.1"
+  version = "~> 0.2"
 }
 
 ##############################################################
