@@ -1,5 +1,5 @@
 # Template - IBM WebSphere Network Deployment V9 on a single virtual machine
-Template Version - 2.0
+Template Version - 2.1
 
 ## Description
 
