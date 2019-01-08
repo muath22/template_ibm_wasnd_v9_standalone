@@ -659,7 +659,7 @@ resource "ucd_component_mapping" "Deploy_WAS_App" {
 }
 
 resource "ucd_resource_tree" "resource_tree" {
-  base_resource_group_name = "Websphere Plant"
+  base_resource_group_name = "Websphere Plant2"
 }
 
 resource "ucd_environment" "environment" {
