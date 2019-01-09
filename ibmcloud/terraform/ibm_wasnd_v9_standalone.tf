@@ -363,6 +363,7 @@ variable "ucd_user" {
 variable "ucd_password" {
   type = "string"
   description = "UCD Password."
+  default = "admin"
 }
 
 variable "ucd_server_url" {
@@ -659,7 +660,7 @@ resource "ucd_component_mapping" "Deploy_WAS_App" {
 }
 
 resource "ucd_resource_tree" "resource_tree" {
-  base_resource_group_name = "Websphere Plant2"
+  base_resource_group_name = "Websphere Plant_CAM"
 }
 
 resource "ucd_environment" "environment" {
