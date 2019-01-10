@@ -677,7 +677,7 @@ resource "ucd_agent_mapping" "WASNode01_agent" {
 }
 
 resource "ucd_application_process_request" "application_process_request" {
-  depends_on = ["ucd_component_mapping.Deploy_WAS_App"]  # depends on is merged with new components
+  depends_on = ["WASNode01_was_create_standalone","ucd_component_mapping.Deploy_WAS_App"]  # depends on is merged with new components
   application = "Plant Application"
   application_process = "Deploy App"
   environment = "${ucd_environment.environment.name}"
