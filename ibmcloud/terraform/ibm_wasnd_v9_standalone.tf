@@ -438,7 +438,7 @@ fi
 
 userid=$1
 ssh_key=$2
-
+echo "161.156.69.189  devops" >> /etc/hosts
 if [[ $ssh_key = 'None' ]]; then
   echo "skipping add, 'None' specified"
   exit 0
